@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🏭 Kho Kiến Thức NMN Thủ Đức</title>
+<!-- v59: Thay JSONP bằng fetch CSV để hoạt động trên GitHub Pages -->
 <style>
 /* ============================================
    RESET & VARIABLES
@@ -1463,7 +1464,7 @@ details.form-panel > summary::after {
         <div id="toolsPaneGsheet" class="tools-pane" style="display:none;padding:14px 16px;">
             <div class="hint" style="margin-bottom:16px;line-height:1.7;">
                 <b style="color:var(--text);">☁️ Đồng bộ từ Google Sheets</b><br>
-                Bấm nút để tải dữ liệu mới nhất từ Google Sheets về. Cần đang đăng nhập Google trên trình duyệt này và file đã được <b>share "Anyone with link can view"</b>.
+                Bấm nút để tải dữ liệu mới nhất từ Google Sheets về. Yêu cầu: file Google Sheets đã được <b>share "Anyone with link can view"</b> (không cần đăng nhập Google). Hoạt động trên GitHub Pages.
             </div>
 
             <!-- Thiết bị -->
@@ -3128,45 +3129,64 @@ function gsSetBtnLoading(btnId, loading) {
     btn.textContent = loading ? '⏳ Đang tải...' : '⬇️ Tải';
 }
 
-// Lấy dữ liệu qua Google Visualization Query API (JSONP-style, không bị CORS)
-function gsFetchSheet({ id, gid }) {
-    return new Promise((resolve, reject) => {
-        const cbName = '_gsCallback_' + Date.now() + '_' + Math.random().toString(36).slice(2);
-        const timeout = setTimeout(() => {
-            delete window[cbName];
-            if (script.parentNode) script.parentNode.removeChild(script);
-            reject(new Error('Timeout kết nối Google Sheets (>15s). Kiểm tra mạng hoặc thử lại.'));
-        }, 15000);
-
-        window[cbName] = function(resp) {
-            clearTimeout(timeout);
-            delete window[cbName];
-            if (script.parentNode) script.parentNode.removeChild(script);
-            try {
-                if (!resp || !resp.table) {
-                    reject(new Error('Google Sheets trả về dữ liệu rỗng. Kiểm tra file đã share "Anyone with link can view".'));
-                    return;
-                }
-                const cols = resp.table.cols.map(c => c.label || c.id || '');
-                const rows = (resp.table.rows || []).map(r =>
-                    Object.fromEntries(cols.map((col, i) => [col, r.c[i] ? (r.c[i].v !== null ? String(r.c[i].v) : '') : '']))
-                ).filter(row => Object.values(row).some(v => v.trim() !== ''));
-                resolve(rows);
-            } catch(e) {
-                reject(new Error('Lỗi parse dữ liệu: ' + e.message));
+// Lấy dữ liệu qua Google Sheets CSV export — không bị CORS, hoạt động trên GitHub Pages
+// Sheet phải được share "Anyone with link can view"
+function parseCSV(text) {
+    const rows = [];
+    const lines = text.split(/\r?\n/);
+    for (let i = 0; i < lines.length; i++) {
+        const row = [];
+        let cur = '', inQ = false;
+        for (let j = 0; j < lines[i].length; j++) {
+            const ch = lines[i][j];
+            if (ch === '"') {
+                if (inQ && lines[i][j+1] === '"') { cur += '"'; j++; }
+                else inQ = !inQ;
+            } else if (ch === ',' && !inQ) {
+                row.push(cur); cur = '';
+            } else {
+                cur += ch;
             }
-        };
+        }
+        row.push(cur);
+        rows.push(row);
+    }
+    return rows;
+}
 
-        const url = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:json&callback=${cbName}&gid=${gid}&t=${Date.now()}`;
-        const script = document.createElement('script');
-        script.src = url;
-        script.onerror = () => {
-            clearTimeout(timeout);
-            delete window[cbName];
-            reject(new Error('Không kết nối được Google Sheets. Kiểm tra: (1) Sheet đã share "Anyone with link can view", (2) Kết nối internet ổn định.'));
-        };
-        document.head.appendChild(script);
-    });
+async function gsFetchSheet({ id, gid }) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+    const url = `https://docs.google.com/spreadsheets/d/${id}/export?format=csv&gid=${gid}&t=${Date.now()}`;
+    try {
+        const resp = await fetch(url, { signal: controller.signal });
+        clearTimeout(timeout);
+        if (!resp.ok) {
+            if (resp.status === 401 || resp.status === 403) {
+                throw new Error('Không có quyền truy cập. Kiểm tra file đã share "Anyone with link can view".');
+            }
+            throw new Error(`Google Sheets trả về lỗi HTTP ${resp.status}. Kiểm tra Sheet ID và quyền chia sẻ.`);
+        }
+        const text = await resp.text();
+        if (!text || text.trim() === '') {
+            throw new Error('Sheet trống hoặc không đọc được. Kiểm tra file đã share "Anyone with link can view".');
+        }
+        const allRows = parseCSV(text);
+        if (allRows.length < 2) {
+            throw new Error('Sheet không có dữ liệu (cần ít nhất 1 dòng tiêu đề + 1 dòng dữ liệu).');
+        }
+        const headers = allRows[0].map(h => String(h).trim());
+        const rows = allRows.slice(1)
+            .map(r => Object.fromEntries(headers.map((h, i) => [h, (r[i] !== undefined ? String(r[i]).trim() : '')])))
+            .filter(row => Object.values(row).some(v => v !== ''));
+        return rows;
+    } catch (e) {
+        clearTimeout(timeout);
+        if (e.name === 'AbortError') {
+            throw new Error('Timeout kết nối Google Sheets (>15s). Kiểm tra mạng hoặc thử lại.');
+        }
+        throw e;
+    }
 }
 
 async function gsLoadEquip() {

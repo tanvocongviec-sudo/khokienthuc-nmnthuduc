@@ -3104,12 +3104,14 @@ globalRenderActiveBar();
 resetGlobalSearch();
 
 // ============================================================
-// 20. GOOGLE SHEETS SYNC (URLs gắn cứng)
+// 20. GOOGLE SHEETS SYNC
+// Dùng Google Visualization Query API — không cần auth, không bị CORS
+// Sheet phải được share "Anyone with link can view"
 // ============================================================
-const GS_URLS = {
-    equip: 'https://docs.google.com/spreadsheets/d/1yqDgq5BCSBznL-ixxd1Ur2qYYXoYEHFU/export?format=csv&gid=1123799061',
-    sys:   'https://docs.google.com/spreadsheets/d/1EIl8bRE8eRZG0noGi18dTOsPyernucQU/export?format=csv&gid=184667839',
-    kb:    'https://docs.google.com/spreadsheets/d/1AYmj_o5PpOeFGu5sGErGwvalBYhBDFYI/export?format=csv&gid=1910923622'
+const GS_IDS = {
+    equip: { id: '1yqDgq5BCSBznL-ixxd1Ur2qYYXoYEHFU', gid: '1123799061' },
+    sys:   { id: '1EIl8bRE8eRZG0noGi18dTOsPyernucQU', gid: '184667839'  },
+    kb:    { id: '1AYmj_o5PpOeFGu5sGErGwvalBYhBDFYI', gid: '1910923622' }
 };
 
 function gsSetStatus(elId, msg, ok) {
@@ -3126,58 +3128,55 @@ function gsSetBtnLoading(btnId, loading) {
     btn.textContent = loading ? '⏳ Đang tải...' : '⬇️ Tải';
 }
 
-async function gsFetchCsv(url) {
-    const t = Date.now();
-    const fetchUrl = url + '&t=' + t;
+// Lấy dữ liệu qua Google Visualization Query API (JSONP-style, không bị CORS)
+function gsFetchSheet({ id, gid }) {
+    return new Promise((resolve, reject) => {
+        const cbName = '_gsCallback_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+        const timeout = setTimeout(() => {
+            delete window[cbName];
+            if (script.parentNode) script.parentNode.removeChild(script);
+            reject(new Error('Timeout kết nối Google Sheets (>15s). Kiểm tra mạng hoặc thử lại.'));
+        }, 15000);
 
-    // Kiểm tra nội dung có phải CSV thật không (tránh nhận trang đăng nhập HTML)
-    function isCsvContent(text) {
-        if (!text || text.length < 5) return false;
-        const head = text.trimStart().slice(0, 200).toLowerCase();
-        if (head.startsWith('<!doctype') || head.startsWith('<html')) return false;
-        return true;
-    }
-
-    // 1. Thử trực tiếp (hoạt động khi mở từ web server hoặc browser hỗ trợ)
-    try {
-        const resp = await fetch(fetchUrl, { cache: 'no-store' });
-        if (resp.ok) {
-            const text = await resp.text();
-            if (isCsvContent(text)) return text;
-        }
-    } catch(e) {}
-
-    // 2. Danh sách CORS proxy fallback
-    const proxies = [
-        `https://corsproxy.io/?${encodeURIComponent(url)}`,
-        `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-        `https://cors-anywhere.herokuapp.com/${url}`,
-    ];
-
-    for (const proxyUrl of proxies) {
-        try {
-            const resp = await fetch(proxyUrl, { cache: 'no-store' });
-            if (resp.ok) {
-                const text = await resp.text();
-                if (isCsvContent(text)) return text;
+        window[cbName] = function(resp) {
+            clearTimeout(timeout);
+            delete window[cbName];
+            if (script.parentNode) script.parentNode.removeChild(script);
+            try {
+                if (!resp || !resp.table) {
+                    reject(new Error('Google Sheets trả về dữ liệu rỗng. Kiểm tra file đã share "Anyone with link can view".'));
+                    return;
+                }
+                const cols = resp.table.cols.map(c => c.label || c.id || '');
+                const rows = (resp.table.rows || []).map(r =>
+                    Object.fromEntries(cols.map((col, i) => [col, r.c[i] ? (r.c[i].v !== null ? String(r.c[i].v) : '') : '']))
+                ).filter(row => Object.values(row).some(v => v.trim() !== ''));
+                resolve(rows);
+            } catch(e) {
+                reject(new Error('Lỗi parse dữ liệu: ' + e.message));
             }
-        } catch(e) {}
-    }
+        };
 
-    throw new Error('Không tải được CSV. Hãy thử: (1) Mở file HTML từ web server thay vì file:// local, (2) Kiểm tra Google Sheet đã share "Anyone with link can view", (3) Dùng trình duyệt Chrome/Edge và đăng nhập Google.');
+        const url = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:json&callback=${cbName}&gid=${gid}&t=${Date.now()}`;
+        const script = document.createElement('script');
+        script.src = url;
+        script.onerror = () => {
+            clearTimeout(timeout);
+            delete window[cbName];
+            reject(new Error('Không kết nối được Google Sheets. Kiểm tra: (1) Sheet đã share "Anyone with link can view", (2) Kết nối internet ổn định.'));
+        };
+        document.head.appendChild(script);
+    });
 }
 
 async function gsLoadEquip() {
     gsSetBtnLoading('btnGsLoadEquip', true);
     gsSetStatus('gsEquipStatus', '⏳ Đang kết nối Google Sheets...', null);
     try {
-        const csv = await gsFetchCsv(GS_URLS.equip);
-        const wb = XLSX.read(csv, { type: 'string' });
-        const ws = wb.Sheets[wb.SheetNames[0]];
-        const data = XLSX.utils.sheet_to_json(ws, { defval: '' });
+        const data = await gsFetchSheet(GS_IDS.equip);
         if (!data.length) throw new Error('Sheet trống hoặc không đọc được dữ liệu.');
         const parsed = gsParseEquipRows(data);
-        if (!parsed.length) throw new Error('Không parse được. Kiểm tra tên cột trong sheet.');
+        if (!parsed.length) throw new Error('Không parse được. Kiểm tra tên cột: ten_thong_tin, thong_so_chinh, tags.');
         items = parsed;
         saveData();
         renderList();
@@ -3198,10 +3197,7 @@ async function gsLoadSys() {
     gsSetBtnLoading('btnGsLoadSys', true);
     gsSetStatus('gsSysStatus', '⏳ Đang kết nối Google Sheets...', null);
     try {
-        const csv = await gsFetchCsv(GS_URLS.sys);
-        const wb = XLSX.read(csv, { type: 'string' });
-        const ws = wb.Sheets[wb.SheetNames[0]];
-        const data = XLSX.utils.sheet_to_json(ws, { defval: '' });
+        const data = await gsFetchSheet(GS_IDS.sys);
         if (!data.length) throw new Error('Sheet trống hoặc không đọc được dữ liệu.');
         const parsed = gsParseSysRows(data);
         if (!parsed.length) throw new Error('Không parse được. Kiểm tra cột: id, name, mota, hdvh, tags.');
@@ -3224,10 +3220,7 @@ async function gsLoadKb() {
     gsSetBtnLoading('btnGsLoadKb', true);
     gsSetStatus('gsKbStatus', '⏳ Đang kết nối Google Sheets...', null);
     try {
-        const csv = await gsFetchCsv(GS_URLS.kb);
-        const wb = XLSX.read(csv, { type: 'string' });
-        const ws = wb.Sheets[wb.SheetNames[0]];
-        const data = XLSX.utils.sheet_to_json(ws, { defval: '' });
+        const data = await gsFetchSheet(GS_IDS.kb);
         if (!data.length) throw new Error('Sheet trống hoặc không đọc được dữ liệu.');
         const parsed = gsParseKbRows(data);
         if (!parsed.length) throw new Error('Không parse được. Kiểm tra cột: ten_thong_tin, thong_so_nguyen_ly, tags.');
@@ -3254,14 +3247,31 @@ async function gsLoadAll() {
 }
 
 // Parser: Thiết bị
+// Helper: lấy giá trị cột linh hoạt (không phân biệt hoa/thường, khoảng trắng)
+function gsCol(row, ...keys) {
+    // Tạo map chuẩn hóa key một lần
+    const normalized = Object.fromEntries(
+        Object.entries(row).map(([k, v]) => [k.trim().toLowerCase().replace(/\s+/g,'_'), v])
+    );
+    for (const key of keys) {
+        const k = key.trim().toLowerCase().replace(/\s+/g,'_');
+        if (normalized[k] !== undefined && normalized[k] !== null) {
+            const v = String(normalized[k]).trim();
+            if (v) return v;
+        }
+    }
+    return '';
+}
+
+// Parser: Thiết bị
 function gsParseEquipRows(data) {
     return data.map(row => {
-        const name = String(row['ten_thong_tin'] || row['Tên thiết bị'] || row['name'] || '').trim();
+        const name = gsCol(row, 'ten_thong_tin', 'tên_thiết_bị', 'name', 'ten');
         if (!name) return null;
-        const detail = String(row['thong_so_chinh'] || row['thong_so_nguyen_ly'] || row['detail'] || '').trim();
-        const tagsRaw = String(row['tags'] || row['Tags'] || '').trim();
+        const detail = gsCol(row, 'thong_so_chinh', 'thong_so_nguyen_ly', 'detail', 'noi_dung');
+        const tagsRaw = gsCol(row, 'tags');
         const tags = tagsRaw ? tagsRaw.split(';').map(t => t.trim()).filter(Boolean) : [];
-        const nlRaw = String(row['nguyen_ly_cot_loi'] || row['nguyen_ly'] || '').trim();
+        const nlRaw = gsCol(row, 'nguyen_ly_cot_loi', 'nguyen_ly');
         const nguyenLy = nlRaw ? parseNguyenLy(nlRaw) : [];
         const fields = detail ? gsParseDetailFields(detail) : [];
         return { id: uid(), name, detail, fields, highlights: null, nguyenLy, tags, createdAt: new Date().toISOString() };
@@ -3271,12 +3281,12 @@ function gsParseEquipRows(data) {
 // Parser: Hệ thống
 function gsParseSysRows(data) {
     return data.map(row => {
-        const id = String(row['id'] || row['ID'] || uid()).trim();
-        const name = String(row['name'] || row['ten'] || '').trim();
+        const id = gsCol(row, 'id') || uid();
+        const name = gsCol(row, 'name', 'ten', 'ten_he_thong');
         if (!name) return null;
-        const mota = String(row['mota'] || row['mo_ta'] || '').trim();
-        const hdvh = String(row['hdvh'] || row['huong_dan'] || '').trim();
-        const tagsRaw = String(row['tags'] || '').trim();
+        const mota = gsCol(row, 'mota', 'mo_ta', 'mô_tả');
+        const hdvh = gsCol(row, 'hdvh', 'huong_dan', 'huong_dan_van_hanh');
+        const tagsRaw = gsCol(row, 'tags');
         const tags = tagsRaw ? tagsRaw.split(';').map(t => t.trim()).filter(Boolean) : [];
         return { id, name, mota, nguyentac: '', tags, hdvh, hdvhchitiet: '', thietbicon: '' };
     }).filter(Boolean);
@@ -3285,10 +3295,10 @@ function gsParseSysRows(data) {
 // Parser: Thông tin quan trọng
 function gsParseKbRows(data) {
     return data.map(row => {
-        const name = String(row['ten_thong_tin'] || row['name'] || '').trim();
+        const name = gsCol(row, 'ten_thong_tin', 'name', 'ten');
         if (!name) return null;
-        const detail = String(row['thong_so_nguyen_ly'] || row['detail'] || '').trim();
-        const tagsRaw = String(row['tags'] || '').trim();
+        const detail = gsCol(row, 'thong_so_nguyen_ly', 'detail', 'noi_dung');
+        const tagsRaw = gsCol(row, 'tags');
         const tags = tagsRaw ? tagsRaw.split(';').map(t => t.trim()).filter(Boolean) : [];
         return { id: uid(), name, detail, tags, createdAt: new Date().toISOString() };
     }).filter(Boolean);

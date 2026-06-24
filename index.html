@@ -927,66 +927,7 @@ details.form-panel > summary::after {
     flex-wrap: wrap;
 }
 
-.import-section {
-    margin-top: 14px;
-    padding-top: 14px;
-    border-top: 1px dashed var(--border);
-}
-.import-section code {
-    background: var(--panel-2);
-    border: 1px solid var(--border);
-    padding: 1px 6px;
-    border-radius: 4px;
-    font-size: 11px;
-    color: var(--tag-text);
-}
-.import-section a {
-    color: var(--accent);
-    text-decoration: none;
-}
-.import-section a:hover {
-    text-decoration: underline;
-}
 
-#csvPreviewWrap, #sysCsvPreviewWrap, #kbPreviewWrap {
-    margin-top: 10px;
-    display: none;
-}
-.preview-item {
-    background: var(--panel-2);
-    border: 1px solid var(--border);
-    border-radius: 7px;
-    padding: 9px 12px;
-    margin-bottom: 6px;
-    font-size: 13px;
-}
-.preview-item.bad {
-    border-color: var(--red);
-}
-.preview-num {
-    color: var(--text-dim);
-    font-size: 11px;
-    margin-right: 6px;
-}
-.preview-name {
-    font-weight: 700;
-    color: #fff;
-}
-.preview-detail {
-    color: #c9d1d9;
-    margin-top: 4px;
-}
-.preview-err {
-    color: var(--red);
-    margin-top: 4px;
-    font-size: 12px;
-}
-.preview-tags {
-    margin-top: 5px;
-    display: flex;
-    gap: 5px;
-    flex-wrap: wrap;
-}
 
 /* ============================================
    TAB BAR
@@ -1494,25 +1435,7 @@ details.form-panel > summary::after {
 
         <!-- Pane: Thiết bị -->
         <div id="toolsPaneEquip" class="tools-pane" style="padding:14px 16px;">
-            <details class="form-panel">
-                <summary>📂 Nhập từ file Excel (maymocthietbi.xlsx)</summary>
-                <div class="form-body">
-                    <div class="hint">Hỗ trợ 3 định dạng: (1) Cột <code>ten_thong_tin</code>, <code>thong_so_chinh</code>, <code>thong_so_phu</code>, <code>tags</code>, <code>nguyen_ly_cot_loi</code> — <a href="#" id="downloadSample">tải file mẫu</a>. (2) Cột <code>ten_thong_tin</code>, <code>thong_so_nguyen_ly</code>, <code>tags</code> (định dạng cũ). (3) File "Danh mục thiết bị". Tags cách nhau bằng <code>;</code>.</div>
-                    <div class="btn-row" style="margin-top:10px;">
-                        <input type="file" id="csvFile" accept=".xlsx,.xls" style="display:none;">
-                        <button class="btn-primary" id="btnPickCsv">📁 Chọn file Excel</button>
-                        <span class="hint" id="csvFileName" style="margin-top:0;"></span>
-                    </div>
-                    <div id="csvPreviewWrap">
-                        <div class="hint" id="csvPreviewInfo" style="margin-top:10px;"></div>
-                        <div id="csvPreviewList"></div>
-                        <div class="btn-row">
-                            <button class="btn-primary" id="btnConfirmImport">✅ Nhập tất cả</button>
-                            <button class="btn-ghost" id="btnCancelImport">Hủy</button>
-                        </div>
-                    </div>
-                </div>
-            </details>
+
             <div style="display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:10px;">
                 <button class="btn-danger" style="font-size:12px;padding:7px 14px;" id="btnDeleteAll">🗑 Xóa tất cả</button>
                 <button class="btn-ghost" id="btnExportExcel" style="font-size:12px;padding:7px 16px;">📤 Xuất Excel</button>
@@ -1521,25 +1444,7 @@ details.form-panel > summary::after {
 
         <!-- Pane: Hệ thống -->
         <div id="toolsPaneSys" class="tools-pane" style="display:none;padding:14px 16px;">
-            <details class="form-panel">
-                <summary>📂 Nhập từ file Excel (hethong.xlsx)</summary>
-                <div class="form-body">
-                    <div class="hint">Cấu trúc cột: <code>id</code>, <code>name</code>, <code>mota</code>, <code>hdvh</code>, <code>tags</code> (các tag cách nhau bởi dấu <code>;</code>). <a href="#" id="sysDownloadSample">Tải file Excel mẫu</a></div>
-                    <div class="btn-row" style="margin-top:10px;">
-                        <input type="file" id="sysCsvFile" accept=".xlsx,.xls" style="display:none;">
-                        <button class="btn-primary" id="sysBtnPickCsv">📁 Chọn file Excel</button>
-                        <span class="hint" id="sysCsvFileName" style="margin-top:0;"></span>
-                    </div>
-                    <div id="sysCsvPreviewWrap">
-                        <div class="hint" id="sysPreviewInfo" style="margin-top:10px;"></div>
-                        <div id="sysPreviewList"></div>
-                        <div class="btn-row">
-                            <button class="btn-primary" id="sysBtnConfirmImport">✅ Nhập tất cả</button>
-                            <button class="btn-ghost" id="sysBtnCancelImport">Hủy</button>
-                        </div>
-                    </div>
-                </div>
-            </details>
+
             <div style="display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:10px;">
                 <button class="btn-ghost" id="sysBtnExportExcel" style="font-size:12px;padding:7px 16px;">📤 Xuất Excel</button>
             </div>
@@ -1547,25 +1452,7 @@ details.form-panel > summary::after {
 
         <!-- Pane: Kho kiến thức -->
         <div id="toolsPaneKb" class="tools-pane" style="display:none;padding:14px 16px;">
-            <details class="form-panel">
-                <summary>📂 Nhập từ file Excel (thongtinquantrong.xlsx)</summary>
-                <div class="form-body">
-                    <div class="hint">Cấu trúc cột: <code>ten_thong_tin</code>, <code>thong_so_nguyen_ly</code>, <code>tags</code> (các tag cách nhau bởi dấu <code>;</code>, ví dụ <code>KhuVuc:HoaAn;HT:LuocRac</code>). <a href="#" id="kbDownloadSample">Tải file Excel mẫu</a></div>
-                    <div class="btn-row" style="margin-top:10px;">
-                        <input type="file" id="kbCsvFile" accept=".xlsx,.xls" style="display:none;">
-                        <button class="btn-primary" id="kbBtnPickCsv">📁 Chọn file Excel</button>
-                        <span class="hint" id="kbCsvFileName" style="margin-top:0;"></span>
-                    </div>
-                    <div id="kbPreviewWrap">
-                        <div class="hint" id="kbPreviewInfo" style="margin-top:10px;"></div>
-                        <div id="kbPreviewList"></div>
-                        <div class="btn-row">
-                            <button class="btn-primary" id="kbBtnConfirmImport">✅ Nhập tất cả</button>
-                            <button class="btn-ghost" id="kbBtnCancelImport">Hủy</button>
-                        </div>
-                    </div>
-                </div>
-            </details>
+
             <div style="display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:10px;">
                 <button class="btn-danger" style="font-size:12px;padding:7px 14px;" id="kbBtnDeleteAll">🗑 Xóa tất cả</button>
                 <button class="btn-ghost" id="kbBtnExportExcel" style="font-size:12px;padding:7px 16px;">📤 Xuất Excel</button>
@@ -1720,101 +1607,11 @@ const DETAIL_STARTS_RE = new RegExp('^(?:'+DETAIL_LABEL_PATTERN+')\\s*:');
 // ============================================================
 // 2. DATA – Mẫu tối giản (chỉ 2 item để minh họa)
 // ============================================================
-const INITIAL_DATA = [{
-    "id": "u19ee4e6ee00xaji",
-    "name": "Bơm chính",
-    "detail": "Thông số chính: Lưu lượng 6804 m3/h; Cột áp toàn phần 46,3m; Ly tâm trục đứng; Packing; Vị trí: Hầm bơm chính; Số lượng: 06 bơm (4-5 hoạt động, 1-2 dự phòng); Mã số thiết bị: R1-R6; Mục đích sử dụng: Bơm nước sông về Nhà máy nước Thủ Đức để xử lý; Năm lắp đặt: 2002; Hãng SX/Model: Torishima (Nhật) - SPV 750; Vật liệu chính: Cánh: hợp kim đồng BC2 (JIS H5111); Thân: gang xám FCD400 (JIS G5501); Trục: SUS304 (JIS G4303); Động cơ: Hãng Kato (Nhật), Model D257 240 000, Công suất 2200HP, Điện áp 4160V, Dòng điện 240A, Tốc độ 750, Số cực 08, Cấp cách điện F, Cấp bảo vệ IP55",
-    "fields": [
-        { "group": "Thông số chính", "label": "Thông số chính", "value": "Lưu lượng 6804 m3/h; Cột áp toàn phần 46,3m; Ly tâm trục đứng; Packing", "key": null, "secondary": false },
-        { "group": "Thông tin khác", "label": "Vị trí", "value": "Hầm bơm chính", "key": null, "secondary": true },
-        { "group": "Thông tin khác", "label": "Số lượng", "value": "06 bơm (4-5 hoạt động, 1-2 dự phòng)", "key": null, "secondary": true },
-        { "group": "Thông tin khác", "label": "Mã số thiết bị", "value": "R1-R6", "key": null, "secondary": true },
-        { "group": "Thông tin khác", "label": "Mục đích sử dụng", "value": "Bơm nước sông về Nhà máy nước Thủ Đức để xử lý", "key": null, "secondary": true },
-        { "group": "Thông tin khác", "label": "Năm lắp đặt", "value": "2002", "key": null, "secondary": true },
-        { "group": "Thông tin khác", "label": "Hãng SX/Model", "value": "Torishima (Nhật) - SPV 750", "key": null, "secondary": true },
-        { "group": "Thông tin khác", "label": "Vật liệu chính", "value": "Cánh: hợp kim đồng BC2 (JIS H5111); Thân: gang xám FCD400 (JIS G5501); Trục: SUS304 (JIS G4303)", "key": null, "secondary": true },
-        { "group": "Thông tin khác", "label": "Động cơ", "value": "Hãng Kato (Nhật), Model D257 240 000, Công suất 2200HP, Điện áp 4160V, Dòng điện 240A, Tốc độ 750, Số cực 08, Cấp cách điện F, Cấp bảo vệ IP55", "key": null, "secondary": true }
-    ],
-    "highlights": null,
-    "nguyenLy": [
-        { "num": "1", "title": "Bôi trơn trước khi chạy", "text": "Phải cấp nước giải nhiệt ổ đỡ và bôi trơn trục trước khi khởi động." },
-        { "num": "2", "title": "Mực nước an toàn", "text": "Hầm bơm Hóa An phải ≥-1,88m để tránh xâm thực." },
-        { "num": "3", "title": "Hòa đồng bộ", "text": "Động cơ đồng bộ phải hòa lưới trong 8 giây, nếu không SCADA sẽ tự ngắt (Trip)." },
-        { "num": "4", "title": "Liên động van", "text": "Van control phải mở sau 26 giây khởi động để tránh chạy đầu đẩy kín gây nổ ống." },
-        { "num": "5", "title": "Giám sát dòng điện", "text": "Bơm lớn Thủ Đức ổn định ở ~250A, bơm nhỏ ~130-150A; lệch dòng là dấu hiệu bất thường." },
-        { "num": "6", "title": "Làm kín trục", "text": "Độ rò rỉ packing cho phép 15-60 giọt/phút để tản nhiệt." },
-        { "num": "7", "title": "Kiểm soát nhiệt độ", "text": "Nhiệt độ dây quấn ≤100° C, bạc đạn ≤65-95° C$ tùy loại bơm." },
-        { "num": "8", "title": "Vận hành luân phiên", "text": "Đảm bảo số giờ chạy các máy tương đương để tối ưu tuổi thọ." },
-        { "num": "9", "title": "Bảo vệ biến tần (VFD)", "text": "Bơm 1 & 2 Thủ Đức dùng VFD để khởi động mềm và điều tiết áp lực mạng ổn định." },
-        { "num": "10", "title": "Dừng khẩn cấp", "text": "Sử dụng cần Handle gạt sang vị trí \"Trip\" khi có sự cố điện hoặc cơ khí nghiêm trọng." }
-    ],
-    "tags": ["⚙️ Bơm","📍 Hóa An","🏗️ Hầm Bơm Chính","🆔 R1","🆔 R2","🆔 R3","🆔 R4","🆔 R5","🆔 R6","🔖 Bơm chính"],
-    "createdAt": "2026-06-20T00:00:00.000Z"
-}, {
-    "id": "u19ee4e6ee010y6d",
-    "name": "Bơm nước lọc",
-    "detail": "Thông số chính: Lưu lượng 25m3/h; Cột áp 90m; Ly tâm trục ngang nhiều tầng cánh; Packing; Vị trí: Sàn bơm nước lọc; Số lượng: 03 bơm (01 standby, 02 luân phiên); Mã số thiết bị: R10A, R10B, R10C; Mục đích sử dụng: Bơm 1: cấp nước sạch bình thủy áp đóng mở xi lanh thủy lực van bơm chính; Bơm 2,3: cấp nước hệ thống bôi trơn giải nhiệt ổ trượt bơm chính và dầu động cơ; Năm lắp đặt: 2003; Hãng SX/Model: Torishima (Nhật) - MMK-65/9; Vật liệu chính: Cánh: hợp kim đồng BC2 (JIS H5111); Thân: gang xám FCD250 (JIS G5501); Trục: thép cacbon S45C; Động cơ: Hãng Super Line (Nhật), Model SF-JR, Công suất 11kW, Điện áp 440V, Dòng điện 22A, Tốc độ 1440, Số cực 04, Cấp cách điện F, Cấp bảo vệ IP55",
-    "fields": [
-        { "group": "Thông số chính", "label": "Thông số chính", "value": "Lưu lượng 25m3/h; Cột áp 90m; Ly tâm trục ngang nhiều tầng cánh; Packing", "key": null, "secondary": false },
-        { "group": "Thông tin khác", "label": "Vị trí", "value": "Sàn bơm nước lọc", "key": null, "secondary": true },
-        { "group": "Thông tin khác", "label": "Số lượng", "value": "03 bơm (01 standby, 02 luân phiên)", "key": null, "secondary": true },
-        { "group": "Thông tin khác", "label": "Mã số thiết bị", "value": "R10A, R10B, R10C", "key": null, "secondary": true },
-        { "group": "Thông tin khác", "label": "Mục đích sử dụng", "value": "Bơm 1: cấp nước sạch bình thủy áp đóng mở xi lanh thủy lực van bơm chính; Bơm 2,3: cấp nước hệ thống bôi trơn giải nhiệt ổ trượt bơm chính và dầu động cơ", "key": null, "secondary": true },
-        { "group": "Thông tin khác", "label": "Năm lắp đặt", "value": "2003", "key": null, "secondary": true },
-        { "group": "Thông tin khác", "label": "Hãng SX/Model", "value": "Torishima (Nhật) - MMK-65/9", "key": null, "secondary": true },
-        { "group": "Thông tin khác", "label": "Vật liệu chính", "value": "Cánh: hợp kim đồng BC2 (JIS H5111); Thân: gang xám FCD250 (JIS G5501); Trục: thép cacbon S45C", "key": null, "secondary": true },
-        { "group": "Thông tin khác", "label": "Động cơ", "value": "Hãng Super Line (Nhật), Model SF-JR, Công suất 11kW, Điện áp 440V, Dòng điện 22A, Tốc độ 1440, Số cực 04, Cấp cách điện F, Cấp bảo vệ IP55", "key": null, "secondary": true }
-    ],
-    "highlights": null,
-    "nguyenLy": [
-        { "num": "1", "title": "Đa nhiệm", "text": "R10A cấp nước bình thủy áp; R10B/C cấp nước giải nhiệt ổ trượt bơm chính." },
-        { "num": "2", "title": "Tự động hóa", "text": "Vận hành luân phiên và điều khiển bán tự động qua SCADA." },
-        { "num": "3", "title": "Cột áp cao", "text": "Thiết kế nhiều tầng cánh để đạt cột áp 90m, thắng được áp lực thủy lực của hệ thống van." },
-        { "num": "4", "title": "Sàng lọc đầu vào", "text": "Nước thô phải qua máy sàng cặn 0,6mm để bảo vệ cánh bơm lọc." },
-        { "num": "5", "title": "Dự phòng nóng", "text": "Luôn có 01 bơm sẵn sàng (standby) để thay thế tức thì khi hệ thống giải nhiệt mất áp." },
-        { "num": "6", "title": "Làm kín packing", "text": "Cần kiểm tra độ rò rỉ tại cổ trục để tránh hỏng bạc đạn." },
-        { "num": "7", "title": "Điện áp hạ thế", "text": "Vận hành ở mức 440V thông qua MBA 150kVA." },
-        { "num": "8", "title": "Bảo trì hộp số/khớp nối", "text": "Kiểm tra độ đồng tâm để tránh rung động ở tốc độ cao 1440v/p." },
-        { "num": "9", "title": "Vệ sinh lưới lọc bôi trơn", "text": "Đảm bảo áp lực sau bộ lọc đạt 27-33 PSI." },
-        { "num": "10", "title": "Liên động SCADA", "text": "Bơm lọc chạy lỗi sẽ kích hoạt cảnh báo dừng bơm chính tương ứng để bảo vệ thiết bị." }
-    ],
-    "tags": ["⚙️ Bơm","📍 Hóa An","🏗️ Sàn Bơm Nước Lọc","💨 Khí Nén","🆔 R10A","🆔 R10B","🆔 R10C","🔖 Bơm nước lọc"],
-    "createdAt": "2026-06-20T00:00:00.000Z"
-}];
+const INITIAL_DATA = [];
 
-const SYSTEMS_DATA = [{
-    "id": "THNRL",
-    "name": "Thu hồi nước rửa lọc",
-    "mota": "Hệ thống gồm có",
-    "nguyentac": "",
-    "tags": ["nuocrualoc","scada"],
-    "hdvh": "1. KIỂM TRA TRƯỚC KHI VẬN HÀNH\nKiểm tra khu vực trạm thu hồi nước rửa lọc, đảm bảo không có người đang làm việc.\nKiểm tra và đảm bảo van cổng tại cống thoát nước rửa lọc đang ở trạng thái đóng.\nKiểm tra các công tắc khẩn cấp, đảm bảo không bị tác động.\nKiểm tra trạng thái sẵn sàng của hệ thống điện, biến tần và bơm.\nKiểm tra hoạt động của các tủ bảng điện phân phối, đồng hồ đo đếm và hệ thống cảnh báo.\nKiểm tra tín hiệu sẵn sàng từ các cảm biến mực nước và áp lực.\n2. CÁC CHẾ ĐỘ VẬN HÀNH BƠM\nA. Điều khiển bằng tay tại chỗ (Tủ Local tại bể thu hồi)\nBước 1: Bật công tắc LOCAL/SCADA tại tủ Remote (hầm 73’) sang vị trí LOCAL.\nBước 2: Bật công tắc Local/Remote tại trạm thu hồi sang vị trí LOCAL.\nBước 3: Bật công tắc Hand/Off/Auto tại tủ Remote sang vị trí HAND.\nBước 4: Nhấn nút START (màu xanh) tại tủ Local để cấp nguồn cho biến tần và chạy bơm.\nTheo dõi: Màn hình HMI, thông số điện áp, áp lực ống đẩy và tiếng động bất thường của bơm.\nB. Điều khiển bằng tay từ xa (Tủ Remote tại hầm 73’)\nBước 1: Bật công tắc LOCAL/SCADA tại tủ Remote sang vị trí LOCAL.\nBước 2: Bật công tắc Local/Remote tại trạm thu hồi sang vị trí REMOTE.\nBước 3: Chuyển công tắc Hand/Off/Auto tại tủ Remote về OFF, sau đó bật sang HAND.\nBước 4: Nhấn nút START (màu xanh). Bơm sẽ chạy khi phao cơ báo đầy nước.\nLưu ý riêng cho Bơm 2: Điều chỉnh công tắc chọn nguồn sang Bank 1, Bank 2 hoặc Auto tùy nhu cầu.\nC. Điều khiển bằng tay qua SCADA\nBước 1: Chuyển công tắc LOCAL/SCADA tại tủ Remote về vị trí SCADA.\nBước 2: Chuyển công tắc Bank 1/Bank 2/Auto tại tủ Remote sang AUTO.\nBước 3: Chuyển công tắc Hand/Off/Auto của 3 bơm tại tủ Remote sang AUTO.\nBước 4: Trên màn hình SCADA, chuyển chế độ từ AUTO sang MANUAL.\nBước 5: Sử dụng các nút nhấn RUN/STOP trực tiếp trên màn hình SCADA để điều khiển từng bơm.\nD. Điều khiển tự động qua SCADA\nBước 1: Kiểm tra các giá trị cài đặt Lmax1, Lmax2, Lmin, Pmin trên giao diện.\nBước 2: Chuyển công tắc LOCAL/SCADA tại tủ Remote về SCADA.\nBước 3: Chuyển công tắc Bank 1/Bank 2/Auto và công tắc Hand/Off/Auto của 3 bơm sang AUTO.\nBước 4: Trên giao diện SCADA, chuyển từ chế độ MANUAL sang AUTO để hệ thống tự vận hành theo mực nước.\n3. DỪNG BƠM\nNhấn nút STOP (màu đỏ) trên bảng điều khiển tương ứng (Local, Remote hoặc SCADA).\nLưu ý: Bơm sẽ tự động ngắt khi phao cơ hoặc cảm biến báo cạn nước (L < Lmin).\n4. XỬ LÝ SỰ CỐ RÚT GỌN\nÁp suất ống thấp: Kiểm tra tốc độ bơm, rò rỉ ống, cảm biến áp lực -> Tăng tốc độ, xử lý rò rỉ, thay cảm biến hoặc dừng bơm nếu bể thiếu nước.\nÁp suất ống cao: Kiểm tra tốc độ bơm, số lượng bơm chạy, vật cản ống -> Giảm tốc độ, chỉ chạy tối đa 2 bơm, thông tắc đường ống.\nLưu lượng ống quá cao/thấp: Kiểm tra áp suất, chế độ vận hành, rò rỉ mặt bích -> Điều chỉnh tốc độ bơm, kiểm tra và siết lại các mối nối/mặt bích.\nTiêu thụ điện năng lớn: Kiểm tra nguồn điện, dây dẫn, biến tần -> Tạm ngưng nếu điện áp không ổn định, kiểm tra rò điện dây dẫn hoặc thông số biến tần.\nBơm chạy nhưng không lên nước: Kiểm tra chiều quay động cơ, van 1 chiều, van chặn ống đẩy -> Đảo pha nguồn, kiểm tra/mở hoàn toàn các van.\nBơm ngừng đột ngột: Kiểm tra lỗi biến tần, kết nối PLC, ngắn mạch gây nhảy CB -> Khắc phục lỗi hiển thị, kiểm tra hệ thống điện điều khiển.\nBơm rung, ồn: Kiểm tra dị vật cánh quạt, ổ bi, khớp nối, vị trí lắp đặt -> Vệ sinh dị vật, cố định lại các khớp nối hoặc thay ổ bi.\nĐộng cơ quá tải: Kiểm tra cột áp, lưu lượng, nguồn điện, dị vật ống -> Đối chiếu biểu đồ hãng, ổn định điện áp, thông thoáng đường ống.",
-    "hdvhchitiet": "",
-    "thietbicon": ""
-}, {
-    "id": "MTGVOIPAC",
-    "name": "hai máy thổi gió C49-1 và C49-2 (trộn hóa chất vôi, PAC)",
-    "mota": "Hệ thống gồm có",
-    "nguyentac": "",
-    "tags": ["c49-1","c49-2","vôi","pac"],
-    "hdvh": "Dưới đây là hướng dẫn vận hành hai máy thổi gió C49-1 và C49-2 (trộn hóa chất vôi, PAC) được trình bày dưới dạng danh sách, không sử dụng bảng theo yêu cầu của bạn:\n1. Kiểm tra trước khi vận hành\nMở hoàn toàn tất cả các van ngõ ra của hệ thống máy thổi gió.\nKiểm tra trạng thái hai máy thổi gió và hệ thống điều khiển đảm bảo hoạt động bình thường.\n2. Vận hành chế độ Tự động (AUTO)\nBước 1: Kiểm tra đảm bảo các van ngõ ra đã mở hoàn toàn.\nBước 2: Gạt công tắc điều khiển tại chỗ và tủ điều khiển từ xa của cả 02 máy thổi gió sang chế độ AUTO.\nLưu ý: Máy sẽ tự động hoạt động luân phiên theo thời gian được lập trình sẵn qua bộ LOGO 230RC.\n3. Vận hành chế độ Bằng tay (HAND)\nSử dụng khi một máy bị sự cố cần cô lập, khi hệ thống tự động lỗi hoặc theo yêu cầu vận hành.\nBước 1: Kiểm tra đảm bảo các van ngõ ra đã mở hoàn toàn.\nBước 2: Gạt công tắc tại tủ điều khiển của máy thổi gió cần vận hành sang chế độ Hand.\n4. Kiểm tra trong khi máy hoạt động\nTheo dõi thường xuyên các thông số vận hành: dòng điện, áp suất, nhiệt độ.\nKiểm tra mức nhớt bôi trơn bạc đạn và tiếng khua của máy.\n5. Dừng máy thổi gió\nGạt công tắc chuyển chế độ vận hành về vị trí OFF.\n6. Xử lý sự cố\nSự cố thông số/dấu hiệu bất thường: Khi phát hiện dòng điện, áp suất, nhiệt độ, mức nhớt hoặc tiếng khua có dấu hiệu bất thường -> Cô lập máy, dừng hoạt động và báo phiếu kiểm tra sửa chữa.\nSự cố cả hai máy thổi gió (C49-1 và C49-2):\nMở van tay hòa chung hệ thống đường ống dẫn gió trộn hóa chất và đường ống khí nén lấy xác vôi.\nVận hành hai máy nén khí C47, C48 để cấp khí nén hòa trộn hóa chất thay thế.",
-    "hdvhchitiet": "",
-    "thietbicon": ""
-}];
+const SYSTEMS_DATA = [];
 
-const KB_INITIAL_DATA = [{
-    "id": "kb19ee8cce4c0xbit",
-    "name": "Số lượng máy lược rác",
-    "detail": "03 máy lược rác độc lập đặt tại 3 hầm thu nước sông.",
-    "tags": ["📍 Khu vực Hóa An","⚙️ Lược rác"],
-    "createdAt": "2026-06-21T00:00:00.000Z"
-}, {
-    "id": "kb19ee8cce4c1dyb4",
-    "name": "Bơm nước rửa lược rác",
-    "detail": "02 bơm dùng để cấp nước vệ sinh cho cả 3 máy lược rác.",
-    "tags": ["📍 Khu vực Hóa An","⚙️ Lược rác"],
-    "createdAt": "2026-06-21T00:00:00.000Z"
-}];
+const KB_INITIAL_DATA = [];
 
 // ============================================================
 // 3. GLOBAL STATE
@@ -1833,9 +1630,7 @@ let kbPage = 1;
 
 let systems = [];
 let activeSysTag = null;
-let sysPendingImport = [];
 
-let pendingImport = [];
 
 // Global search state
 let globalActiveTags = new Set();
@@ -2291,220 +2086,6 @@ function saveHtml() {
 }
 
 // ============================================================
-// 13. IMPORT EXCEL (THIẾT BỊ)
-// ============================================================
-const normalizeHeader = h => String(h).trim().toLowerCase().replace(/\s+/g,'_');
-
-function findColIdx(header, needle){ return header.findIndex(h=>h.includes(needle)); }
-
-function inferEquipmentTags(chuong, text){
-    const tags = [];
-    const c = String(chuong||'').trim();
-    if(/^I[\.\s]/.test(c) || /^I$/.test(c)) tags.push('📍 Trạm Hóa An');
-    else if(/^II[\.\s]/.test(c) || /^II$/.test(c)) tags.push('📍 Thủ Đức');
-    else tags.push('📍 Chung');
-    const t = String(text||'').toLowerCase();
-    const add = (cond, tag) => { if(cond && !tags.includes(tag)) tags.push(tag); };
-    add(/bơm/.test(t) && /(nước thô|trạm bơm|bơm chính)/.test(t), '🔧 Bơm Nước Thô');
-    add(/bơm/.test(t) && /nước lọc/.test(t), '🔧 Bơm Nước Lọc');
-    add(/bơm/.test(t) && /(nước sạch|backwash)/.test(t), '🔧 Bơm Nước Sạch');
-    add(/lược rác/.test(t), '🔧 Lược Rác');
-    add(/(khí nén|máy nén)/.test(t), '🔧 Khí Nén');
-    add(/(đường ống|tuyến ống|van.*ống)/.test(t), '🔧 Đường Ống');
-    add(/clo/.test(t), '☢️ Hệ Thống Clo');
-    add(/\bpac\b/.test(t), '🧪 PAC');
-    add(/vôi/.test(t), '🧪 Vôi Sữa');
-    add(/(fluor|flour)/.test(t), '🧪 Fluor');
-    add(/bể chứa/.test(t), '🧪 Bể Chứa');
-    add(/bể lắng/.test(t), '🧪 Bể Lắng');
-    add(/(bể lọc|hồ lọc)/.test(t), '🧪 Bể Lọc');
-    add(/(scada|plc|rio\b)/.test(t), '💻 SCADA / PLC');
-    add(/(biến áp|\bmba\b|trung thế)/.test(t), '⚡ Điện Trung Thế');
-    add(/hạ thế/.test(t), '⚡ Điện Hạ Thế');
-    add(/(điều hòa|máy lạnh)/.test(t), '❄️ Điều Hòa');
-    add(/quan trắc/.test(t), '📊 Quan Trắc Online');
-    return tags;
-}
-
-function buildEquipmentDetail(get){
-    const fields = [];
-    const push = (group, label, val, key, secondary=false) => { if(val && String(val).trim()) fields.push({group, label, value:String(val).trim(), key, secondary}); };
-    push('Thông tin chung', 'Vị trí', get('vt'), 'vt');
-    push('Thông tin chung', 'Số lượng', get('sl'), 'sl', true);
-    push('Thông tin chung', 'Mã số thiết bị', get('mst'), 'mst');
-    push('Thông tin chung', 'Mục đích sử dụng', get('md'), 'md');
-    push('Thông tin chung', 'Năm lắp đặt', get('nld'), 'nld');
-    const hangTb = get('htb'), maTb = get('mhtb');
-    if(hangTb || maTb) push('Thông tin chung', 'Hãng SX / Model', [hangTb, maTb].filter(Boolean).join(' - '), 'htbmodel');
-    push('Thông số kỹ thuật', 'Thông số chính', get('tsc'), 'tsc');
-    push('Thông số kỹ thuật', 'Vật liệu chính', get('vlc'), 'vlc', true);
-    push('Thông tin động cơ', 'Hãng SX động cơ', get('hdc'), 'hdc', true);
-    push('Thông tin động cơ', 'Model động cơ', get('mhdc'), 'mhdc', true);
-    push('Thông tin động cơ', 'Công suất động cơ', get('csdc'), 'csdc', true);
-    push('Thông tin động cơ', 'Điện áp', get('da'), 'da', true);
-    push('Thông tin động cơ', 'Dòng điện', get('ddm'), 'ddm', true);
-    push('Thông tin động cơ', 'Tốc độ', get('td'), 'td', true);
-    push('Thông tin động cơ', 'Số cực', get('sc'), 'sc', true);
-    push('Thông tin động cơ', 'Cấp cách điện', get('cce'), 'cce', true);
-    push('Thông tin động cơ', 'Cấp bảo vệ', get('cbv'), 'cbv', true);
-    push('Ghi chú', 'Ghi chú', get('gc'), 'gc', true);
-    const byKey = key => fields.find(f=>f.key===key);
-    const highlights = ['vt','mst','nld'].map(byKey).filter(Boolean);
-    const capacity = byKey('csdc') || byKey('tsc');
-    if(capacity) highlights.push(capacity);
-    const text = fields.map(f=>`${f.label}: ${f.value}`).join('; ');
-    return { fields, highlights, text };
-}
-
-function splitLabeledSegments(text, group, secondary, fallbackLabel){
-    const trimmed = String(text||'').trim();
-    if(!trimmed) return [];
-    if(!DETAIL_STARTS_RE.test(trimmed)){
-        return [{group, label: fallbackLabel, value: trimmed, key:null, secondary}];
-    }
-    return trimmed.split(DETAIL_SPLIT_RE).map(seg=>{
-        const m = seg.match(new RegExp('^((?:'+DETAIL_LABEL_PATTERN+'))\\s*:\\s*(.*)$', 's'));
-        if(m) return {group, label:m[1].trim(), value:m[2].trim(), key:null, secondary};
-        return {group, label: fallbackLabel, value: seg.trim(), key:null, secondary};
-    }).filter(f=>f.value);
-}
-
-function handleFile(file){
-    const reader = new FileReader();
-    reader.onload = (e)=>{
-        try{
-            const data = new Uint8Array(e.target.result);
-            const wb = XLSX.read(data,{type:'array'});
-            let rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,raw:false,defval:''});
-            rows = rows.filter(r=>r.some(c=>String(c).trim()!==''));
-            if(rows.length<2){ showToast('❌ File không có dữ liệu',true); return; }
-            const header = rows[0].map(normalizeHeader);
-            const iN=header.indexOf('ten_thong_tin'), iD=header.indexOf('thong_so_nguyen_ly'), iT=header.indexOf('tags');
-            const iChinh=header.indexOf('thong_so_chinh'), iPhu=header.indexOf('thong_so_phu');
-            const iNguyenLy=header.indexOf('nguyen_ly_cot_loi');
-            const iEqName = findColIdx(header, 'tên_thiết_bị');
-            if(iN!==-1 && (iChinh!==-1 || iPhu!==-1)){
-                pendingImport = rows.slice(1).map((r,i)=>{
-                    const name = String(r[iN]??'').trim();
-                    const chinhText = iChinh!==-1 ? String(r[iChinh]??'').trim() : '';
-                    const phuText = iPhu!==-1 ? String(r[iPhu]??'').trim() : '';
-                    const fieldsChinh = splitLabeledSegments(chinhText, 'Thông số chính', false, 'Thông số chính');
-                    const fieldsPhu = splitLabeledSegments(phuText, 'Thông tin khác', true, 'Thông tin khác');
-                    const fields = [...fieldsChinh, ...fieldsPhu];
-                    const detail = fields.map(f=>`${f.label}: ${f.value}`).join('; ');
-                    const nguyenLy = iNguyenLy!==-1 ? parseNguyenLy(r[iNguyenLy]) : [];
-                    const tagsStr=iT!==-1?String(r[iT]??'').trim():'';
-                    const tags=tagsStr?tagsStr.split(';').map(t=>t.trim()).filter(Boolean):[];
-                    const errors=[];
-                    if(!name) errors.push('thiếu tên');
-                    if(!detail) errors.push('thiếu nội dung');
-                    return{rowNum:i+2,name,detail,fields,nguyenLy,tags,errors};
-                }).filter(r=>!(r.name===''&&r.detail===''&&r.tags.length===0));
-            } else if(iN!==-1 && iD!==-1){
-                pendingImport = rows.slice(1).map((r,i)=>{
-                    const name=String(r[iN]??'').trim(), detail=String(r[iD]??'').trim();
-                    const nguyenLy = iNguyenLy!==-1 ? parseNguyenLy(r[iNguyenLy]) : [];
-                    const tagsStr=iT!==-1?String(r[iT]??'').trim():'';
-                    const tags=tagsStr?tagsStr.split(';').map(t=>t.trim()).filter(Boolean):[];
-                    const errors=[];
-                    if(!name) errors.push('thiếu tên');
-                    if(!detail) errors.push('thiếu nội dung');
-                    return{rowNum:i+2,name,detail,nguyenLy,tags,errors};
-                }).filter(r=>!(r.name===''&&r.detail===''&&r.tags.length===0));
-            } else if(iEqName!==-1){
-                const idx = {
-                    chuong: findColIdx(header,'chương'),
-                    vt: findColIdx(header,'vị_trí'),
-                    sl: findColIdx(header,'số_lượng'),
-                    mst: findColIdx(header,'mã_số_thiết_bị'),
-                    md: findColIdx(header,'mục_đích'),
-                    nld: findColIdx(header,'năm_lắp_đặt'),
-                    htb: findColIdx(header,'hãng_sx_(thiết_bị'),
-                    mhtb: findColIdx(header,'mã_hiệu_(thiết_bị'),
-                    tsc: findColIdx(header,'thông_số_chính'),
-                    vlc: findColIdx(header,'vật_liệu_chính'),
-                    hdc: findColIdx(header,'hãng_sx_(động_cơ'),
-                    mhdc: findColIdx(header,'mã_hiệu_động_cơ'),
-                    csdc: findColIdx(header,'công_suất_động_cơ'),
-                    da: findColIdx(header,'điện_áp'),
-                    ddm: findColIdx(header,'dòng_điện'),
-                    td: findColIdx(header,'tốc_độ'),
-                    sc: findColIdx(header,'số_cực'),
-                    cce: findColIdx(header,'cấp_cách_điện'),
-                    cbv: findColIdx(header,'cấp_bảo_vệ'),
-                    gc: findColIdx(header,'ghi_chú'),
-                };
-                const cell = (r,key) => idx[key]!==-1 ? String(r[idx[key]]??'').trim() : '';
-                pendingImport = rows.slice(1).map((r,i)=>{
-                    const name = String(r[iEqName]??'').trim();
-                    const get = (key)=>cell(r,key);
-                    const built = buildEquipmentDetail(get);
-                    const detail = built.text;
-                    const fields = built.fields;
-                    const highlights = built.highlights;
-                    const chuong = get('chuong');
-                    const tagText = [name, get('md'), get('vt')].join(' ');
-                    const tags = inferEquipmentTags(chuong, tagText);
-                    const errors=[];
-                    if(!name) errors.push('thiếu tên thiết bị');
-                    if(!detail) errors.push('thiếu nội dung');
-                    return{rowNum:i+2,name,detail,fields,highlights,tags,errors};
-                }).filter(r=>!(r.name===''&&r.detail===''));
-            } else {
-                showToast('❌ Không nhận diện được định dạng cột (thiếu ten_thong_tin hoặc Tên thiết bị)',true);
-                return;
-            }
-            renderPreview();
-        } catch(err){ showToast('❌ Không đọc được file Excel', true); }
-    };
-    reader.readAsArrayBuffer(file);
-}
-
-function renderPreview(){
-    const wrap=document.getElementById('csvPreviewWrap');
-    if(!pendingImport.length){ wrap.style.display='none'; showToast('⚠️ Không có dữ liệu',true); return; }
-    const ok=pendingImport.filter(r=>!r.errors.length).length, bad=pendingImport.length-ok;
-    document.getElementById('csvPreviewInfo').innerHTML =
-        `Tìm thấy <b style="color:var(--accent)">${pendingImport.length}</b> dòng. `+
-        `Hợp lệ: <b style="color:var(--green)">${ok}</b>`+
-        (bad?`, Bỏ qua: <b style="color:var(--red)">${bad}</b>`:'');
-    document.getElementById('csvPreviewList').innerHTML =
-        pendingImport.slice(0,30).map(r=>r.errors.length?
-            `<div class="preview-item bad"><span class="preview-num">Dòng ${r.rowNum}</span><span class="preview-err">⚠ ${esc(r.errors.join(', '))}</span></div>`:
-            `<div class="preview-item"><span class="preview-num">Dòng ${r.rowNum}</span> <span class="preview-name">${esc(r.name)}</span><div class="preview-detail">${esc(r.detail.slice(0,120))}${r.detail.length>120?'…':''}</div>${r.tags.length?`<div class="preview-tags">${r.tags.map(t=>`<span class="pill">${esc(t)}</span>`).join('')}</div>`:''}</div>`
-        ).join('')+(pendingImport.length>30?`<div class="hint">...và ${pendingImport.length-30} dòng khác</div>`:'');
-    wrap.style.display='block';
-}
-
-function confirmImport(){
-    const valid=pendingImport.filter(r=>!r.errors.length);
-    if(!valid.length){ showToast('Không có dòng hợp lệ',true); return; }
-    const newItems=valid.map(r=>({id:uid(),name:r.name,detail:r.detail,fields:r.fields||null,highlights:r.highlights||null,nguyenLy:r.nguyenLy&&r.nguyenLy.length?r.nguyenLy:null,tags:r.tags,createdAt:new Date().toISOString()}));
-    items=[...newItems,...items]; saveData();
-    renderQuickTags(); renderActiveBar(); renderList();
-    showToast(`✅ Đã nhập ${valid.length} mục`);
-    cancelImport();
-}
-
-function cancelImport(){
-    pendingImport=[];
-    document.getElementById('csvPreviewWrap').style.display='none';
-    document.getElementById('csvFile').value='';
-    document.getElementById('csvFileName').textContent='';
-}
-
-function downloadSample(){
-    const sampleData=[
-        ['ten_thong_tin','thong_so_chinh','thong_so_phu','tags','nguyen_ly_cot_loi'],
-        ['Máy bơm thô B1','Thông số chính: Công suất 2250HP; Lưu lượng 6804 m3/h','Điện áp: 4.16kV; Ghi chú: Khởi động cần nước giải nhiệt trước','KhuVuc:HoaAn;HT:BomTho','1. Bôi trơn trước khi chạy: Phải cấp nước giải nhiệt trước khi khởi động.\n2. Hòa đồng bộ: Động cơ phải hòa lưới trong 8 giây.'],
-    ];
-    const ws=XLSX.utils.aoa_to_sheet(sampleData);
-    const wb=XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb,ws,'DuLieu');
-    XLSX.writeFile(wb,'mau-nhap-lieu.xlsx');
-}
-
-// ============================================================
 // 14. SYSTEM TAB
 // ============================================================
 
@@ -2661,95 +2242,6 @@ function sysClearForm(){
     document.getElementById('sysInpTags').value = '';
 }
 
-// System Import
-function sysHandleFile(file){
-    const reader = new FileReader();
-    reader.onload = (e)=>{
-        let rows;
-        try{
-            const data = new Uint8Array(e.target.result);
-            const workbook = XLSX.read(data, { type:'array' });
-            const sheet = workbook.Sheets[workbook.SheetNames[0]];
-            rows = XLSX.utils.sheet_to_json(sheet, { header:1, raw:false, defval:'' });
-        } catch(err){ showToast('❌ Không đọc được file Excel', true); return; }
-        rows = rows.filter(r => r.some(cell => String(cell).trim() !== ''));
-        if(rows.length < 1){ showToast('❌ File Excel trống', true); return; }
-        const header = rows[0].map(normalizeHeader);
-        const idxId = header.indexOf('id');
-        const idxName = header.indexOf('name');
-        const idxMota = header.indexOf('mota');
-        const idxHdvh = header.indexOf('hdvh');
-        const idxTags = header.indexOf('tags');
-        if(idxId===-1 || idxName===-1){
-            showToast('❌ File Excel thiếu cột bắt buộc: id, name', true);
-            return;
-        }
-        sysPendingImport = rows.slice(1).map((r,i)=>{
-            const id = String(r[idxId]??'').trim();
-            const name = String(r[idxName]??'').trim();
-            const mota = idxMota!==-1 ? String(r[idxMota]??'').trim() : '';
-            const hdvh = idxHdvh!==-1 ? String(r[idxHdvh]??'').trim() : '';
-            const tagsStr = idxTags!==-1 ? String(r[idxTags]??'').trim() : '';
-            const tags = tagsStr ? tagsStr.split(';').map(t=>t.trim()).filter(Boolean) : [];
-            const errors = [];
-            if(!id) errors.push('thiếu ID');
-            if(!name) errors.push('thiếu tên');
-            if(systems.some(s=>s.id===id)) errors.push(`ID "${id}" đã tồn tại`);
-            return { rowNum:i+2, id, name, mota, hdvh, tags, errors };
-        }).filter(r=>!(r.id===''&&r.name===''));
-        sysRenderPreview();
-    };
-    reader.onerror = ()=>showToast('❌ Lỗi đọc file', true);
-    reader.readAsArrayBuffer(file);
-}
-
-function sysRenderPreview(){
-    const wrap = document.getElementById('sysCsvPreviewWrap');
-    if(sysPendingImport.length===0){ wrap.style.display='none'; showToast('⚠️ Không tìm thấy dữ liệu hợp lệ trong file', true); return; }
-    const ok = sysPendingImport.filter(r=>r.errors.length===0).length;
-    const bad = sysPendingImport.length - ok;
-    document.getElementById('sysPreviewInfo').innerHTML =
-        `Tìm thấy <b style="color:var(--accent)">${sysPendingImport.length}</b> dòng. `+
-        `Hợp lệ: <b style="color:var(--green)">${ok}</b>` +
-        (bad>0 ? `, Lỗi (sẽ bị bỏ qua): <b style="color:var(--red)">${bad}</b>` : '');
-    document.getElementById('sysPreviewList').innerHTML = sysPendingImport.slice(0,30).map(r=>{
-        if(r.errors.length>0){
-            return `<div class="preview-item bad"><span class="preview-num">Dòng ${r.rowNum}</span><span class="preview-err">⚠ Bỏ qua: ${esc(r.errors.join(', '))}</span></div>`;
-        }
-        return `<div class="preview-item"><span class="preview-num">Dòng ${r.rowNum}</span> <span class="preview-name">${esc(r.id)} - ${esc(r.name)}</span><div class="preview-detail">${esc(r.mota.slice(0,100))}${r.mota.length>100?'…':''}</div>${r.tags.length?`<div class="preview-tags">${r.tags.map(t=>`<span class="pill">${esc(t)}</span>`).join('')}</div>`:''}</div>`;
-    }).join('') + (sysPendingImport.length>30?`<div class="hint">...và ${sysPendingImport.length-30} dòng khác</div>`:'');
-    wrap.style.display = 'block';
-}
-
-function sysConfirmImport(){
-    const valid = sysPendingImport.filter(r=>r.errors.length===0);
-    if(!valid.length){ showToast('Không có dòng hợp lệ', true); return; }
-    const newItems = valid.map(r=>({ id:r.id, name:r.name, mota:r.mota, nguyentac:'', tags:r.tags, hdvh:r.hdvh, hdvhchitiet:'', thietbicon:'' }));
-    systems = [...newItems, ...systems];
-    sysSaveData();
-    buildSysTagBar();
-    renderSystemList(document.getElementById('systemSearchBox').value);
-    showToast(`✅ Đã nhập ${valid.length} hệ thống`);
-    sysCancelImport();
-}
-
-function sysCancelImport(){
-    sysPendingImport = [];
-    document.getElementById('sysCsvPreviewWrap').style.display='none';
-    document.getElementById('sysCsvFile').value='';
-    document.getElementById('sysCsvFileName').textContent='';
-}
-
-function sysDownloadSample(){
-    const sampleData = [
-        ['id','name','mota','hdvh','tags'],
-        ['HT001','Hệ thống mẫu','Mô tả hệ thống','Hướng dẫn vận hành chi tiết','tag1;tag2'],
-    ];
-    const ws = XLSX.utils.aoa_to_sheet(sampleData);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'DuLieu');
-    XLSX.writeFile(wb, 'mau-he-thong-van-hanh.xlsx');
-}
 
 function sysExportExcel(){
     if(systems.length===0){ showToast('⚠️ Không có dữ liệu để xuất', true); return; }
@@ -2950,93 +2442,6 @@ function kbDeleteAll(){
     showToast('🗑 Đã xóa toàn bộ');
 }
 
-// KB IMPORT
-let kbPendingImport = [];
-
-function kbHandleFile(file){
-    const reader = new FileReader();
-    reader.onload = (e)=>{
-        let rows;
-        try{
-            const data = new Uint8Array(e.target.result);
-            const workbook = XLSX.read(data, { type:'array' });
-            const sheet = workbook.Sheets[workbook.SheetNames[0]];
-            rows = XLSX.utils.sheet_to_json(sheet, { header:1, raw:false, defval:'' });
-        } catch(err){ showToast('❌ Không đọc được file Excel', true); return; }
-        rows = rows.filter(r => r.some(cell => String(cell).trim() !== ''));
-        if(rows.length < 1){ showToast('❌ File Excel trống', true); return; }
-        const header = rows[0].map(normalizeHeader);
-        const idxName = header.indexOf('ten_thong_tin');
-        const idxDetail = header.indexOf('thong_so_nguyen_ly');
-        const idxTags = header.indexOf('tags');
-        if(idxName===-1 || idxDetail===-1){
-            showToast('❌ File Excel thiếu cột bắt buộc: ten_thong_tin, thong_so_nguyen_ly', true);
-            return;
-        }
-        kbPendingImport = rows.slice(1).map((r,i)=>{
-            const name = String(r[idxName]??'').trim();
-            const detail = String(r[idxDetail]??'').trim();
-            const tagsStr = idxTags!==-1 ? String(r[idxTags]??'').trim() : '';
-            const tags = kbParseTags(tagsStr);
-            const errors = [];
-            if(!name) errors.push('thiếu tên thông tin');
-            if(!detail) errors.push('thiếu nội dung');
-            return { rowNum:i+2, name, detail, tags, errors };
-        }).filter(r=>!(r.name===''&&r.detail===''&&r.tags.length===0));
-        kbRenderPreview();
-    };
-    reader.onerror = ()=>showToast('❌ Lỗi đọc file', true);
-    reader.readAsArrayBuffer(file);
-}
-
-function kbRenderPreview(){
-    const wrap = document.getElementById('kbPreviewWrap');
-    if(kbPendingImport.length===0){ wrap.style.display='none'; showToast('⚠️ Không tìm thấy dữ liệu hợp lệ trong file', true); return; }
-    const ok = kbPendingImport.filter(r=>r.errors.length===0).length;
-    const bad = kbPendingImport.length - ok;
-    document.getElementById('kbPreviewInfo').innerHTML =
-        `Tìm thấy <b style="color:var(--accent)">${kbPendingImport.length}</b> dòng. `+
-        `Hợp lệ: <b style="color:var(--green)">${ok}</b>` +
-        (bad>0 ? `, Lỗi (sẽ bị bỏ qua): <b style="color:var(--red)">${bad}</b>` : '');
-    document.getElementById('kbPreviewList').innerHTML = kbPendingImport.slice(0,30).map(r=>{
-        if(r.errors.length>0){
-            return `<div class="preview-item bad"><span class="preview-num">Dòng ${r.rowNum}</span><span class="preview-err">⚠ Bỏ qua: ${esc(r.errors.join(', '))}</span></div>`;
-        }
-        return `<div class="preview-item"><span class="preview-num">Dòng ${r.rowNum}</span> <span class="preview-name">${esc(r.name)}</span><div class="preview-detail">${esc(r.detail.slice(0,120))}${r.detail.length>120?'…':''}</div>${r.tags.length?`<div class="preview-tags">${r.tags.map(t=>`<span class="pill">${esc(t)}</span>`).join('')}</div>`:''}</div>`;
-    }).join('') + (kbPendingImport.length>30?`<div class="hint">...và ${kbPendingImport.length-30} dòng khác</div>`:'');
-    wrap.style.display = 'block';
-}
-
-function kbConfirmImport(){
-    const valid = kbPendingImport.filter(r=>r.errors.length===0);
-    if(!valid.length){ showToast('Không có dòng hợp lệ', true); return; }
-    const newItems = valid.map(r=>({ id:uid(), name:r.name, detail:r.detail, tags:r.tags, createdAt:new Date().toISOString() }));
-    kbItems = [...newItems, ...kbItems];
-    kbSaveData();
-    kbRenderQuickTags();
-    kbRenderActiveBar();
-    kbRenderList();
-    showToast(`✅ Đã nhập ${valid.length} mục`);
-    kbCancelImport();
-}
-
-function kbCancelImport(){
-    kbPendingImport = [];
-    document.getElementById('kbPreviewWrap').style.display='none';
-    document.getElementById('kbCsvFile').value='';
-    document.getElementById('kbCsvFileName').textContent='';
-}
-
-function kbDownloadSample(){
-    const sampleData = [
-        ['ten_thong_tin','thong_so_nguyen_ly','tags'],
-        ['Số lượng máy lược rác','03 máy lược rác độc lập đặt tại 3 hầm thu nước sông.','📍 Khu vực Hóa An;⚙️ Lược rác'],
-    ];
-    const ws = XLSX.utils.aoa_to_sheet(sampleData);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'DuLieu');
-    XLSX.writeFile(wb, 'mau-kho-kien-thuc.xlsx');
-}
 
 function kbExportExcel(){
     if(kbItems.length===0){ showToast('⚠️ Không có dữ liệu để xuất', true); return; }
@@ -3678,27 +3083,12 @@ document.querySelectorAll('.tools-sub-tab').forEach(tab => {
 document.getElementById('btnDeleteAll').addEventListener('click', deleteAll);
 document.getElementById('btnSaveHtml').addEventListener('click', saveHtml);
 document.getElementById('btnExportExcel').addEventListener('click', exportExcel);
-document.getElementById('btnPickCsv').addEventListener('click', ()=>document.getElementById('csvFile').click());
-document.getElementById('csvFile').addEventListener('change', (e)=>{ const f=e.target.files[0]; if(!f)return; document.getElementById('csvFileName').textContent='📄 '+f.name; handleFile(f); });
-document.getElementById('btnConfirmImport').addEventListener('click', confirmImport);
-document.getElementById('btnCancelImport').addEventListener('click', cancelImport);
-document.getElementById('downloadSample').addEventListener('click', (e)=>{ e.preventDefault(); downloadSample(); });
 
 // Sys data tools
-document.getElementById('sysBtnPickCsv').addEventListener('click', ()=>document.getElementById('sysCsvFile').click());
-document.getElementById('sysCsvFile').addEventListener('change', (e)=>{ const f=e.target.files[0]; if(!f)return; document.getElementById('sysCsvFileName').textContent='📄 '+f.name; sysHandleFile(f); });
-document.getElementById('sysBtnConfirmImport').addEventListener('click', sysConfirmImport);
-document.getElementById('sysBtnCancelImport').addEventListener('click', sysCancelImport);
-document.getElementById('sysDownloadSample').addEventListener('click', (e)=>{ e.preventDefault(); sysDownloadSample(); });
 document.getElementById('sysBtnExportExcel').addEventListener('click', sysExportExcel);
 
 // KB data tools
 document.getElementById('kbBtnDeleteAll').addEventListener('click', kbDeleteAll);
-document.getElementById('kbBtnPickCsv').addEventListener('click', ()=>document.getElementById('kbCsvFile').click());
-document.getElementById('kbCsvFile').addEventListener('change', (e)=>{ const f=e.target.files[0]; if(!f)return; document.getElementById('kbCsvFileName').textContent='📄 '+f.name; kbHandleFile(f); });
-document.getElementById('kbBtnConfirmImport').addEventListener('click', kbConfirmImport);
-document.getElementById('kbBtnCancelImport').addEventListener('click', kbCancelImport);
-document.getElementById('kbDownloadSample').addEventListener('click', (e)=>{ e.preventDefault(); kbDownloadSample(); });
 document.getElementById('kbBtnExportExcel').addEventListener('click', kbExportExcel);
 document.getElementById('btnSaveHtml').addEventListener('click', saveHtml);
 
@@ -3737,25 +3127,44 @@ function gsSetBtnLoading(btnId, loading) {
 }
 
 async function gsFetchCsv(url) {
-    // Thử thêm nocache param để tránh cache cũ
-    const fetchUrl = url + '&t=' + Date.now();
-    let resp;
+    const t = Date.now();
+    const fetchUrl = url + '&t=' + t;
+
+    // Kiểm tra nội dung có phải CSV thật không (tránh nhận trang đăng nhập HTML)
+    function isCsvContent(text) {
+        if (!text || text.length < 5) return false;
+        const head = text.trimStart().slice(0, 200).toLowerCase();
+        if (head.startsWith('<!doctype') || head.startsWith('<html')) return false;
+        return true;
+    }
+
+    // 1. Thử trực tiếp (hoạt động khi mở từ web server hoặc browser hỗ trợ)
     try {
-        resp = await fetch(fetchUrl, { credentials: 'include', cache: 'no-store' });
-        if (resp.ok) return await resp.text();
+        const resp = await fetch(fetchUrl, { cache: 'no-store' });
+        if (resp.ok) {
+            const text = await resp.text();
+            if (isCsvContent(text)) return text;
+        }
     } catch(e) {}
-    // Fallback: thử không credentials (nếu file public hoàn toàn)
-    try {
-        resp = await fetch(fetchUrl, { cache: 'no-store' });
-        if (resp.ok) return await resp.text();
-    } catch(e) {}
-    // Fallback: dùng CORS proxy
-    try {
-        const proxy = 'https://corsproxy.io/?' + encodeURIComponent(url);
-        resp = await fetch(proxy, { cache: 'no-store' });
-        if (resp.ok) return await resp.text();
-    } catch(e) {}
-    throw new Error('Không tải được. Kiểm tra file đã share "Anyone with link" chưa, hoặc đang đăng nhập Google trên trình duyệt này.');
+
+    // 2. Danh sách CORS proxy fallback
+    const proxies = [
+        `https://corsproxy.io/?${encodeURIComponent(url)}`,
+        `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+        `https://cors-anywhere.herokuapp.com/${url}`,
+    ];
+
+    for (const proxyUrl of proxies) {
+        try {
+            const resp = await fetch(proxyUrl, { cache: 'no-store' });
+            if (resp.ok) {
+                const text = await resp.text();
+                if (isCsvContent(text)) return text;
+            }
+        } catch(e) {}
+    }
+
+    throw new Error('Không tải được CSV. Hãy thử: (1) Mở file HTML từ web server thay vì file:// local, (2) Kiểm tra Google Sheet đã share "Anyone with link can view", (3) Dùng trình duyệt Chrome/Edge và đăng nhập Google.');
 }
 
 async function gsLoadEquip() {

@@ -3176,7 +3176,10 @@ async function gsLoadEquip() {
         const data = await gsFetchSheet(GS_IDS.equip);
         if (!data.length) throw new Error('Sheet trống hoặc không đọc được dữ liệu.');
         const parsed = gsParseEquipRows(data);
-        if (!parsed.length) throw new Error('Không parse được. Kiểm tra tên cột: ten_thong_tin, thong_so_chinh, tags.');
+        if (!parsed.length) {
+            const cols = data.length ? Object.keys(data[0]).join(' | ') : '(không có)';
+            throw new Error(`Không parse được. Tên cột thực tế trong sheet: [${cols}]. Cần cột: ten_thong_tin, thong_so_chinh, tags.`);
+        }
         items = parsed;
         saveData();
         renderList();
@@ -3200,7 +3203,10 @@ async function gsLoadSys() {
         const data = await gsFetchSheet(GS_IDS.sys);
         if (!data.length) throw new Error('Sheet trống hoặc không đọc được dữ liệu.');
         const parsed = gsParseSysRows(data);
-        if (!parsed.length) throw new Error('Không parse được. Kiểm tra cột: id, name, mota, hdvh, tags.');
+        if (!parsed.length) {
+            const cols = data.length ? Object.keys(data[0]).join(' | ') : '(không có)';
+            throw new Error(`Không parse được. Tên cột thực tế: [${cols}]. Cần cột: id, name, mota, hdvh, tags.`);
+        }
         systems = parsed;
         sysSaveData();
         renderSystemList('');
@@ -3223,7 +3229,10 @@ async function gsLoadKb() {
         const data = await gsFetchSheet(GS_IDS.kb);
         if (!data.length) throw new Error('Sheet trống hoặc không đọc được dữ liệu.');
         const parsed = gsParseKbRows(data);
-        if (!parsed.length) throw new Error('Không parse được. Kiểm tra cột: ten_thong_tin, thong_so_nguyen_ly, tags.');
+        if (!parsed.length) {
+            const cols = data.length ? Object.keys(data[0]).join(' | ') : '(không có)';
+            throw new Error(`Không parse được. Tên cột thực tế: [${cols}]. Cần cột: ten_thong_tin, thong_so_nguyen_ly, tags.`);
+        }
         kbItems = parsed;
         kbSaveData();
         kbRenderList();
@@ -3248,15 +3257,25 @@ async function gsLoadAll() {
 
 // Parser: Thiết bị
 // Helper: lấy giá trị cột linh hoạt (không phân biệt hoa/thường, khoảng trắng)
+function gsNormKey(s) {
+    // Chuẩn hóa key: lowercase, bỏ dấu tiếng Việt, thay khoảng trắng/gạch ngang bằng _
+    return String(s).trim().toLowerCase()
+        .normalize('NFD').replace(/[̀-ͯ]/g, '')  // bỏ dấu
+        .replace(/đ/g, 'd')
+        .replace(/[^a-z0-9]+/g, '_')
+        .replace(/^_+|_+$/g, '');
+}
+
 function gsCol(row, ...keys) {
-    // Tạo map chuẩn hóa key một lần
-    const normalized = Object.fromEntries(
-        Object.entries(row).map(([k, v]) => [k.trim().toLowerCase().replace(/\s+/g,'_'), v])
-    );
+    // Build normalized map từ row keys
+    const normMap = {};
+    for (const [k, v] of Object.entries(row)) {
+        normMap[gsNormKey(k)] = v;
+    }
     for (const key of keys) {
-        const k = key.trim().toLowerCase().replace(/\s+/g,'_');
-        if (normalized[k] !== undefined && normalized[k] !== null) {
-            const v = String(normalized[k]).trim();
+        const nk = gsNormKey(key);
+        if (normMap[nk] !== undefined && normMap[nk] !== null) {
+            const v = String(normMap[nk]).trim();
             if (v) return v;
         }
     }
